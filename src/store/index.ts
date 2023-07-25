@@ -9,10 +9,10 @@ export default new Vuex.Store<any>({
 	},
 	getters: {},
 	mutations: {
-		addToDo(state, todo: any) {},
+		//addToDo(state, todo: any) {},
 	},
 	actions: {
-		addToDo({ commit }, todo: any) {},
+		//addToDo({ commit }, todo: any) {},
 	},
 	modules: {},
 });

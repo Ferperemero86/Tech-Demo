@@ -5,12 +5,12 @@
 </template>
 
 <script lang="ts">
-import { Todo } from '@/store';
-import { Vue, Prop, Component } from 'vue-property-decorator';
+//import { Todo } from '@/store';
+import { Vue, Component } from 'vue-property-decorator';
 
 @Component({})
 export default class ToDoItemCard extends Vue {
-	toggleStatus(): void {}
+	//toggleStatus(): void {}
 }
 </script>
 
