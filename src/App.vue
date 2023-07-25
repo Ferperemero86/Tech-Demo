@@ -1,5 +1,6 @@
 <template>
 	<v-app>
+		<Header></Header>
 		<v-main>
 			<router-view />
 		</v-main>
@@ -9,6 +10,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-@Component({})
+import Header from '@/components/layout/Header.vue';
+
+@Component({
+	components: { Header },
+})
 export default class App extends Vue {}
 </script>

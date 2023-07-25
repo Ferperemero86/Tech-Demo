@@ -1,10 +1,5 @@
 <template>
-	<div class="about">
-		<v-app-bar color="deep-purple" dark>
-			<v-app-bar-title> Todo List </v-app-bar-title>
-			<v-spacer />
-		</v-app-bar>
-	</div>
+	<div></div>
 </template>
 
 <script lang="ts">
