@@ -24,6 +24,7 @@
 						v-for="todo in getCompletedTodos()"
 						:key="todo.id"
 						:toDo="todo"
+						:imageUrl="todo.imageUrl"
 					/>
 				</div>
 			</div>

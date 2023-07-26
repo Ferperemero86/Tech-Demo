@@ -39,6 +39,11 @@ const storeOptions: StoreOptions<RootState> = {
 				todo.isCompleted = isCompleted;
 			}
 		},
+		setTodoImage(state, { imageUrl, todo }) {
+			if (todo) {
+				todo.imageUrl = imageUrl;
+			}
+		},
 	},
 	actions: {
 		addToDo({ commit }, todo: Todo) {
@@ -50,6 +55,11 @@ const storeOptions: StoreOptions<RootState> = {
 			if (todo) {
 				commit('setTodoStatus', { isCompleted, todo });
 			}
+		},
+		updateTodoImage({ commit, state }, { id, imageUrl }) {
+			const todo = state.todos.find((todo) => todo.id === id);
+
+			commit('setTodoImage', { imageUrl, todo });
 		},
 	},
 	modules: {},
