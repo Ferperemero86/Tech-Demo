@@ -10,3 +10,9 @@ export type FormData = {
 	title: string;
 	description: string;
 };
+
+export type CardMenu = {
+	id?: number;
+	isCompleted: boolean;
+	todo?: Todo;
+};

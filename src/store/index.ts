@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
-import type { Todo } from '@/types'; // Types are included in a single file for reusability
+import type { Todo, CardMenu } from '@/types'; // Types are included in a single file for reusability
 
 Vue.use(Vuex);
 
@@ -33,10 +33,23 @@ const storeOptions: StoreOptions<RootState> = {
 		setToDo(state, todo: Todo) {
 			state.todos.push(todo);
 		},
+		// Gets the card found in the state in the action logic and updates its status
+		setTodoStatus(state, { isCompleted, todo }: CardMenu) {
+			if (todo) {
+				todo.isCompleted = isCompleted;
+			}
+		},
 	},
 	actions: {
 		addToDo({ commit }, todo: Todo) {
 			commit('setToDo', todo);
+		},
+		//Finds card and calls mutation to update the card status
+		updateTodoStatus({ commit, state }, { id, isCompleted }: CardMenu) {
+			const todo = state.todos.find((todo) => todo.id === id);
+			if (todo) {
+				commit('setTodoStatus', { isCompleted, todo });
+			}
 		},
 	},
 	modules: {},
