@@ -1,18 +1,42 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { StoreOptions } from 'vuex';
+import type { Todo } from '@/types'; // Types are included in a single file for reusability
 
 Vue.use(Vuex);
 
-export default new Vuex.Store<any>({
+// Define the type for your state
+export interface RootState {
+	activeTodos: Todo[];
+	completedTodos: Todo[];
+	todos: Todo[];
+}
+
+// Define the type for your root store
+const storeOptions: StoreOptions<RootState> = {
 	state: {
 		todos: [],
+		activeTodos: [],
+		completedTodos: [],
 	},
-	getters: {},
+	getters: {
+		activeTodos: (state) => {
+			return state.todos.filter((todo) => !todo.isCompleted);
+		},
+		completedTodos: (state) => {
+			return state.todos.filter((todo) => todo.isCompleted);
+		},
+	},
 	mutations: {
-		//addToDo(state, todo: any) {},
+		setToDo(state, todo: Todo) {
+			state.todos.push(todo);
+		},
 	},
 	actions: {
-		//addToDo({ commit }, todo: any) {},
+		addToDo({ commit }, todo: Todo) {
+			commit('setToDo', todo);
+		},
 	},
 	modules: {},
-});
+};
+
+export default new Vuex.Store<RootState>(storeOptions);

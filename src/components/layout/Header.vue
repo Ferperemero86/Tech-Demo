@@ -1,8 +1,8 @@
 <template>
-	<div>
-		<v-toolbar class="teal">
+	<div class="teal">
+		<v-toolbar class="px-20 mx-auto teal" flat max-width="1400">
 			<v-toolbar-title>
-				<p class="ma-0 white--text">Todo List</p>
+				<p class="ma-0 white--text">Todo App</p>
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<div>
@@ -19,4 +19,4 @@ import { Vue, Component } from 'vue-property-decorator';
 export default class Header extends Vue {}
 </script>
 
-<style lang="scss"></style>
+<style scoped lang="scss"></style>
