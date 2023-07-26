@@ -2,9 +2,14 @@
 	<div class="home">
 		<div class="hero">
 			<h1 class="text-center">Todo List</h1>
-			<v-btn class="blue white--text" @click="showForm">
-				<v-icon>mdi-plus</v-icon>
-			</v-btn>
+			<div class="hero__buttons">
+				<v-btn :color="primaryDark" @click="showForm">
+					<v-icon color="white">mdi-plus</v-icon>
+				</v-btn>
+				<v-btn :color="brown" class="white--text" @click="getRandomTodo"
+					>Random Todo</v-btn
+				>
+			</div>
 		</div>
 		<div class="cards">
 			<div class="cards__section">
@@ -38,11 +43,12 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios';
 import { Component, Vue } from 'vue-property-decorator';
 import ToDoItemCard from '@/components/ToDoItemCard.vue';
 import TodoForm from '@/components/ToDoForm.vue';
 
-import type { Todo, FormData } from '@/types';
+import { Todo, FormData } from '@/types';
 
 @Component({
 	components: { ToDoItemCard, TodoForm },
@@ -50,6 +56,9 @@ import type { Todo, FormData } from '@/types';
 export default class HomeView extends Vue {
 	isFormValid = false;
 	isFormVisible = false;
+
+	primaryDark = this.$vuetify.theme.themes.light.primaryDark;
+	brown = this.$vuetify.theme.themes.light.brown;
 
 	public getActiveTodos() {
 		return this.$store.getters.activeTodos;
@@ -84,6 +93,33 @@ export default class HomeView extends Vue {
 		}
 
 		this.isFormValid = true;
+	}
+
+	public async getRandomTodo() {
+		const randomNumber = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+
+		try {
+			// Fetch Api data
+			const response = await axios.get(
+				`https://jsonplaceholder.typicode.com/todos/${randomNumber}`
+			);
+
+			if (response) {
+				const randomTodo: Todo = {
+					id: response.data.id,
+					title: response.data.title,
+					description: response.data.description,
+					isCompleted: response.data.completed, // Changes completed property to isCompleted to mach theTodo structure
+					imageUrl: '',
+				};
+
+				randomTodo.id = this.$store.getters.todos.length + 1; // Adds the next id in the list
+
+				this.$store.dispatch('addToDo', randomTodo);
+			}
+		} catch (error) {
+			console.error('Error fetching random todo:', error);
+		}
 	}
 
 	// Runs form validation and adds task if data is valid.
@@ -121,10 +157,17 @@ export default class HomeView extends Vue {
 
 .hero {
 	display: flex;
+	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
 	margin: 30px auto;
-	max-width: 800px;
+	max-width: 500px;
+
+	&__buttons {
+		margin-top: 30px;
+		display: flex;
+		column-gap: 50px;
+	}
 }
 
 .to-do-card {

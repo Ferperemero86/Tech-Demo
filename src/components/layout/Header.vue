@@ -1,6 +1,11 @@
 <template>
-	<div class="teal">
-		<v-toolbar class="px-20 mx-auto teal" flat max-width="1400">
+	<div class="wrapper">
+		<v-toolbar
+			class="px-20 mx-auto"
+			flat
+			max-width="1400"
+			:color="primaryColor"
+		>
 			<v-toolbar-title>
 				<p class="ma-0 white--text">Todo App</p>
 			</v-toolbar-title>
@@ -16,7 +21,14 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component({})
-export default class Header extends Vue {}
+export default class Header extends Vue {
+	primaryColor = this.$vuetify.theme.themes.light.primary;
+}
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.wrapper {
+	width: 100%;
+	background: #4fa928;
+}
+</style>

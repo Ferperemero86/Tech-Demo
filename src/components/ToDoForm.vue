@@ -19,7 +19,7 @@
 								></v-textarea>
 								<div class="d-flex justify-space-between">
 									<v-btn color="primary" type="submit">Add</v-btn>
-									<v-btn @click="cancelForm">Cancel</v-btn>
+									<v-btn @click="cancelForm" :color="errorColor">Cancel</v-btn>
 								</div>
 							</v-form>
 						</v-card-text>
@@ -49,6 +49,8 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class TodoForm extends Vue {
 	title = '';
 	description = '';
+
+	errorColor = this.$vuetify.theme.themes.light.error;
 
 	public cancelForm() {
 		this.$emit('cancel-form');

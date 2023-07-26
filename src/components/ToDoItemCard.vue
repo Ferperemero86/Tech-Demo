@@ -95,9 +95,14 @@ export default class ToDoItemCard extends Vue {
 }
 .menu-button {
 	position: absolute;
+	font-size: 0.6rem;
 	top: 0;
 	right: 0;
 	border-radius: 0;
-	z-index: 9999;
+	z-index: 2;
+
+	@media (min-width: 551px) {
+		font-size: 1rem;
+	}
 }
 </style>
