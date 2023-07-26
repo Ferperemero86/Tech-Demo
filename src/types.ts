@@ -5,3 +5,8 @@ export type Todo = {
 	isCompleted: boolean;
 	imageUrl: string;
 };
+
+export type FormData = {
+	title: string;
+	description: string;
+};

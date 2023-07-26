@@ -19,6 +19,9 @@ const storeOptions: StoreOptions<RootState> = {
 		completedTodos: [],
 	},
 	getters: {
+		todos: (state) => {
+			return state.todos;
+		},
 		activeTodos: (state) => {
 			return state.todos.filter((todo) => !todo.isCompleted);
 		},

@@ -2,7 +2,7 @@
 	<div class="home">
 		<div class="hero">
 			<h1 class="text-center">Todo List</h1>
-			<v-btn class="blue white--text" @click="addToDoItem">
+			<v-btn class="blue white--text" @click="showForm">
 				<v-icon>mdi-plus</v-icon>
 			</v-btn>
 		</div>
@@ -28,26 +28,27 @@
 				</div>
 			</div>
 		</div>
+		<TodoForm
+			v-if="isFormVisible"
+			@cancel-form="hideForm"
+			@update-form="submitForm"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import ToDoItemCard from '../components/ToDoItemCard.vue';
+import { Component, Vue } from 'vue-property-decorator';
+import ToDoItemCard from '@/components/ToDoItemCard.vue';
+import TodoForm from '@/components/ToDoForm.vue';
 
-import { Todo } from '@/types';
+import type { Todo, FormData } from '@/types';
 
 @Component({
-	components: { ToDoItemCard },
+	components: { ToDoItemCard, TodoForm },
 })
 export default class HomeView extends Vue {
-	public todoToAdd: Todo = {
-		title: 'Card 1',
-		description: 'Test',
-		id: 1,
-		isCompleted: false,
-		imageUrl: '',
-	};
+	isFormValid = false;
+	isFormVisible = false;
 
 	public getActiveTodos() {
 		return this.$store.getters.activeTodos;
@@ -57,14 +58,55 @@ export default class HomeView extends Vue {
 		return this.$store.getters.completedTodos;
 	}
 
-	isFormValid = false;
+	public showForm() {
+		this.isFormVisible = true;
+	}
 
-	public addToDoItem(): void {
-		console.log('click');
-		this.$store.dispatch('addToDo', this.todoToAdd);
-		//if (!this.isFormValid) {
-		//	return;
-		//}
+	public hideForm() {
+		this.isFormVisible = false;
+	}
+
+	public validateForm(formData: FormData) {
+		// Validate the form fields
+		if (!formData.title || !formData.description) {
+			alert('Please fill in both Title and Description fields.');
+			return;
+		}
+
+		// Check if the title already exists in the todos array
+		const existingTodo = this.$store.getters.todos.find(
+			(todo: Todo) => todo.title === formData.title
+		);
+		if (existingTodo) {
+			alert('A todo with the same title already exists.');
+			return;
+		}
+
+		this.isFormValid = true;
+	}
+
+	// Runs form validation and adds task if data is valid.
+	public submitForm(formData: FormData) {
+		const { title, description } = formData;
+
+		this.isFormValid = false;
+
+		this.validateForm(formData);
+
+		if (!this.isFormValid) {
+			return;
+		}
+
+		const todo: Todo = {
+			title,
+			description,
+			id: this.$store.getters.todos.length + 1, // Assign a unique ID based on the number of existing todos
+			isCompleted: false,
+			imageUrl: '',
+		};
+
+		this.$store.dispatch('addToDo', todo);
+		this.hideForm();
 	}
 }
 </script>
