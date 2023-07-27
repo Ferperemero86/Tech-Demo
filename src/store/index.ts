@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
-import type { Todo, CardMenu } from '@/types'; // Types are included in a single file for reusability
+import type { Todo, CardMenu, CardImage } from '@/types'; // Types are included in a single file for reusability
 
 Vue.use(Vuex);
 
@@ -33,6 +33,17 @@ const storeOptions: StoreOptions<RootState> = {
 		setToDo(state, todo: Todo) {
 			state.todos.push(todo);
 		},
+		setEditToDo(state, todo: Todo) {
+			const toDoToEdit = state.todos.find(() => todo.id);
+
+			if (toDoToEdit) {
+				toDoToEdit.title = todo.title;
+				toDoToEdit.description = todo.description;
+			}
+		},
+		setDeleteToDo(state, todo: Todo) {
+			state.todos = state.todos.filter((item) => item.id !== todo.id);
+		},
 		// Gets the card found in the state in the action logic and updates its status
 		setTodoStatus(state, { isCompleted, todo }: CardMenu) {
 			if (todo) {
@@ -49,14 +60,21 @@ const storeOptions: StoreOptions<RootState> = {
 		addToDo({ commit }, todo: Todo) {
 			commit('setToDo', todo);
 		},
+		editToDo({ commit }, todo: Todo) {
+			commit('setEditToDo', todo);
+		},
+		deleteToDo({ commit }, todo: Todo) {
+			commit('setDeleteToDo', todo);
+		},
 		//Finds card and calls mutation to update the card status
 		updateTodoStatus({ commit, state }, { id, isCompleted }: CardMenu) {
 			const todo = state.todos.find((todo) => todo.id === id);
+
 			if (todo) {
 				commit('setTodoStatus', { isCompleted, todo });
 			}
 		},
-		updateTodoImage({ commit, state }, { id, imageUrl }) {
+		updateTodoImage({ commit, state }, { id, imageUrl }: CardImage) {
 			const todo = state.todos.find((todo) => todo.id === id);
 
 			commit('setTodoImage', { imageUrl, todo });

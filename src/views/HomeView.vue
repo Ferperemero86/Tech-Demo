@@ -19,6 +19,8 @@
 						v-for="todo in getActiveTodos()"
 						:key="todo.id"
 						:toDo="todo"
+						@edit-todo="editTodo"
+						@delete-todo="deleteTodo"
 					/>
 				</div>
 			</div>
@@ -30,6 +32,8 @@
 						:key="todo.id"
 						:toDo="todo"
 						:imageUrl="todo.imageUrl"
+						@edit-todo="editTodo"
+						@delete-todo="deleteTodo"
 					/>
 				</div>
 			</div>
@@ -38,6 +42,7 @@
 			v-if="isFormVisible"
 			@cancel-form="hideForm"
 			@update-form="submitForm"
+			:isEditing="isEditing"
 		/>
 	</div>
 </template>
@@ -56,9 +61,19 @@ import { Todo, FormData } from '@/types';
 export default class HomeView extends Vue {
 	isFormValid = false;
 	isFormVisible = false;
+	isEditing = false;
 
 	primaryDark = this.$vuetify.theme.themes.light.primaryDark;
 	brown = this.$vuetify.theme.themes.light.brown;
+
+	public editTodo() {
+		this.isEditing = true;
+		this.isFormVisible = true;
+	}
+
+	public deleteTodo(todo: Todo) {
+		this.$store.dispatch('deleteToDo', todo);
+	}
 
 	public getActiveTodos() {
 		return this.$store.getters.activeTodos;
@@ -74,6 +89,7 @@ export default class HomeView extends Vue {
 
 	public hideForm() {
 		this.isFormVisible = false;
+		this.isEditing = false;
 	}
 
 	public validateForm(formData: FormData) {
@@ -139,7 +155,11 @@ export default class HomeView extends Vue {
 			imageUrl: '',
 		};
 
-		this.$store.dispatch('addToDo', todo);
+		if (this.isEditing) {
+			this.$store.dispatch('editToDo', todo);
+		} else {
+			this.$store.dispatch('addToDo', todo);
+		}
 		this.hideForm();
 	}
 }
@@ -150,6 +170,7 @@ export default class HomeView extends Vue {
 	width: 90%;
 	max-width: 1500px;
 	margin: 0 auto;
+	padding-bottom: 50px;
 }
 
 .hero {

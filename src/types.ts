@@ -16,3 +16,8 @@ export type CardMenu = {
 	isCompleted: boolean;
 	todo?: Todo;
 };
+
+export type CardImage = {
+	id: number;
+	imageUrl: string;
+};

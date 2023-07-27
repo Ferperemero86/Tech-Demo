@@ -4,7 +4,9 @@
 			<v-row justify="center">
 				<v-col cols="12">
 					<v-card class="form-card">
-						<v-card-title class="form-title">Add Todo</v-card-title>
+						<v-card-title class="form-title">
+							{{ isEditing ? 'Edit Todo' : 'Add Todo' }}
+						</v-card-title>
 						<v-card-text>
 							<v-form @submit.prevent="updateForm">
 								<v-text-field
@@ -18,7 +20,9 @@
 									required
 								></v-textarea>
 								<div class="d-flex justify-space-between">
-									<v-btn color="primary" type="submit">Add</v-btn>
+									<v-btn color="primary" type="submit">{{
+										isEditing ? 'Update' : 'Add'
+									}}</v-btn>
 									<v-btn @click="cancelForm" :color="errorColor">Cancel</v-btn>
 								</div>
 							</v-form>
@@ -41,12 +45,14 @@
 </style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 // All the form logic is in the parent homepage component and
 // passed to the form for reusability
 @Component({})
 export default class TodoForm extends Vue {
+	@Prop({ default: false }) readonly isEditing!: boolean;
+
 	title = '';
 	description = '';
 

@@ -23,6 +23,10 @@
 			</v-img>
 			<v-card-title class="text-center">{{ toDo.title }}</v-card-title>
 			<v-card-text>{{ toDo.description }}</v-card-text>
+			<v-card-actions>
+				<v-btn color="primary" @click="editTodo">Edit</v-btn>
+				<v-btn color="error" @click="deleteTodo">Delete</v-btn>
+			</v-card-actions>
 		</v-card>
 		<input
 			type="file"
@@ -42,6 +46,14 @@ import type { Todo } from '@/types';
 @Component({})
 export default class ToDoItemCard extends Vue {
 	@Prop() readonly toDo!: Todo;
+
+	public editTodo() {
+		this.$emit('edit-todo');
+	}
+
+	public deleteTodo() {
+		this.$emit('delete-todo', this.toDo);
+	}
 
 	public toggleStatus(isCompleted: boolean) {
 		this.$store.dispatch('updateTodoStatus', { id: this.toDo.id, isCompleted });
