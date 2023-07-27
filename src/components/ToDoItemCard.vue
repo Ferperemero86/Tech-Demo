@@ -24,8 +24,8 @@
 			<v-card-title class="text-center">{{ toDo.title }}</v-card-title>
 			<v-card-text>{{ toDo.description }}</v-card-text>
 			<v-card-actions>
-				<v-btn color="primary" @click="editTodo">Edit</v-btn>
-				<v-btn color="error" @click="deleteTodo">Delete</v-btn>
+				<v-btn color="primary" small @click="editTodo">Edit</v-btn>
+				<v-btn color="error" small @click="deleteTodo">Delete</v-btn>
 			</v-card-actions>
 		</v-card>
 		<input
