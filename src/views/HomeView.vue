@@ -43,10 +43,10 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
 import { Component, Vue } from 'vue-property-decorator';
 import ToDoItemCard from '@/components/ToDoItemCard.vue';
 import TodoForm from '@/components/ToDoForm.vue';
+import makeRequest from '@/api';
 
 import { Todo, FormData } from '@/types';
 
@@ -97,28 +97,25 @@ export default class HomeView extends Vue {
 
 	public async getRandomTodo() {
 		const randomNumber = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+		const url = `https://jsonplaceholder.typicode.com/todos/${randomNumber}`;
+		// Fetch Api data
+		// Allows any data as one property does not mach Todo structure
+		const data = await makeRequest<any>('GET', url);
+		const { id, title, description, completed, imageUrl } = data;
 
-		try {
-			// Fetch Api data
-			const response = await axios.get(
-				`https://jsonplaceholder.typicode.com/todos/${randomNumber}`
-			);
+		if (data) {
+			//Here we make sure our new Todo has the right structure
+			const randomTodo: Todo = {
+				id,
+				title,
+				description,
+				isCompleted: completed, // Changes completed property to isCompleted to mach theTodo structure
+				imageUrl,
+			};
 
-			if (response) {
-				const randomTodo: Todo = {
-					id: response.data.id,
-					title: response.data.title,
-					description: response.data.description,
-					isCompleted: response.data.completed, // Changes completed property to isCompleted to mach theTodo structure
-					imageUrl: '',
-				};
+			randomTodo.id = this.$store.getters.todos.length + 1; // Adds the next id in the list
 
-				randomTodo.id = this.$store.getters.todos.length + 1; // Adds the next id in the list
-
-				this.$store.dispatch('addToDo', randomTodo);
-			}
-		} catch (error) {
-			console.error('Error fetching random todo:', error);
+			this.$store.dispatch('addToDo', randomTodo);
 		}
 	}
 
