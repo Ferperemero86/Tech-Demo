@@ -13,3 +13,5 @@
 - **Created ToDoForm reusable component**: Main logic is implemented in HomeView page, which is passed to the form component for reusability. Form has basic validation.
 
 - **Created Random ToDoTask functionality**: Uses a reusable axios api function validated with typescript. Data object comes with a different property called "completed". Every time the data is fetched the property is replaced for 'isCompleted' to match the Todo structure.
+
+- **Created functionality for editing and deleting todo tasks**: Reused same form and logic.
