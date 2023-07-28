@@ -62,13 +62,15 @@ export default class HomeView extends Vue {
 	isFormValid = false;
 	isFormVisible = false;
 	isEditing = false;
+	toDoToEdit = {};
 
 	primaryDark = this.$vuetify.theme.themes.light.primaryDark;
 	brown = this.$vuetify.theme.themes.light.brown;
 
-	public editTodo() {
+	public editTodo(todo: Todo) {
 		this.isEditing = true;
 		this.isFormVisible = true;
+		this.toDoToEdit = todo;
 	}
 
 	public deleteTodo(todo: Todo) {
@@ -117,14 +119,13 @@ export default class HomeView extends Vue {
 		// Fetch Api data
 		// Allows any data as one property does not mach Todo structure
 		const data = await makeRequest<any>('GET', url);
-		const { id, title, description, completed, imageUrl } = data;
-
+		const { id, title, completed, imageUrl } = data;
 		if (data) {
 			//Here we make sure our new Todo has the right structure
 			const randomTodo: Todo = {
 				id,
 				title,
-				description,
+				description: 'Description',
 				isCompleted: completed, // Changes completed property to isCompleted to mach theTodo structure
 				imageUrl,
 			};
@@ -138,7 +139,6 @@ export default class HomeView extends Vue {
 	// Runs form validation and adds task if data is valid.
 	public submitForm(formData: FormData) {
 		const { title, description } = formData;
-
 		this.isFormValid = false;
 
 		this.validateForm(formData);
@@ -147,17 +147,18 @@ export default class HomeView extends Vue {
 			return;
 		}
 
-		const todo: Todo = {
-			title,
-			description,
-			id: this.$store.getters.todos.length + 1, // Assign a unique ID based on the number of existing todos
-			isCompleted: false,
-			imageUrl: '',
-		};
-
 		if (this.isEditing) {
+			const todo = { ...this.toDoToEdit, ...formData };
 			this.$store.dispatch('editToDo', todo);
 		} else {
+			const todo: Todo = {
+				title,
+				description,
+				id: this.$store.getters.todos.length + 1, // Assign a unique ID based on the number of existing todos
+				isCompleted: false,
+				imageUrl: '',
+			};
+
 			this.$store.dispatch('addToDo', todo);
 		}
 		this.hideForm();

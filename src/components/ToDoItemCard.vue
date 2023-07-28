@@ -48,7 +48,7 @@ export default class ToDoItemCard extends Vue {
 	@Prop() readonly toDo!: Todo;
 
 	public editTodo() {
-		this.$emit('edit-todo');
+		this.$emit('edit-todo', this.toDo);
 	}
 
 	public deleteTodo() {

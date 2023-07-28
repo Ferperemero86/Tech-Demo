@@ -34,7 +34,7 @@ const storeOptions: StoreOptions<RootState> = {
 			state.todos.push(todo);
 		},
 		setEditToDo(state, todo: Todo) {
-			const toDoToEdit = state.todos.find(() => todo.id);
+			const toDoToEdit = state.todos.find((item) => item.id === todo.id);
 
 			if (toDoToEdit) {
 				toDoToEdit.title = todo.title;
